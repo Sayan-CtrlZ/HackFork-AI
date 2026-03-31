@@ -1,147 +1,137 @@
-# HackFork 🍴
+# 🍴 HackFork
 
-> **An adversarial hackathon co-pilot that helps you go from idea → code → pitch → win.**
->
-> *Not your cheerleader. Your competitive edge.*
+> An adversarial hackathon co-pilot. It helps you build, then brutally judges what you built.
 
-[![gitagent](https://img.shields.io/badge/gitagent-0.1.0-blue)](https://github.com/open-gitagent/gitagent)
-[![gitclaw](https://img.shields.io/badge/runtime-gitclaw-green)](https://github.com/open-gitagent/gitclaw)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+HackFork runs as a **git-native AI agent** using the [gitagent](https://github.com/open-gitagent/gitagent) spec. It has two modes:
 
----
-
-## What is HackFork?
-
-HackFork is a git-native AI agent with **two internal voices**:
-
-| Voice | Role |
-|---|---|
-| 🤝 **The Builder** | Your ruthlessly practical co-founder. Scopes fast. Ships faster. |
-| ⚔️ **The Judge** | The skeptical jury member who finds your fatal weaknesses *before* a real judge does. |
-
-The tension between these two personas is the product. HackFork doesn't just generate code — it challenges you to build the right thing, in the right order, for the right audience.
-
----
-
-## Why HackFork?
-
-- **GitHub Copilot** completes your code. It doesn't tell you your project will fail.
-- **ChatGPT** answers your questions. It doesn't red-team your pitch at 3 AM.
-- **HackFork** is the co-pilot that says *"here are the 3 reasons you'd lose — and here's how to fix them before you present."*
+- **`[MODE: BUILDER]`** — Ideates, scaffolds, and pitches your project
+- **`[MODE: JUDGE]`** — Red-teams it against the judging rubric before you present
 
 ---
 
 ## Quickstart
 
+### 1. Clone the repo
+
 ```bash
-# Install gitclaw
+git clone https://github.com/Sayan-CtrlZ/HackFork-AI.git
+cd HackFork-AI
+```
+
+### 2. Install the runtime
+
+```bash
 npm install -g gitclaw
-
-# Clone HackFork
-git clone https://github.com/hackfork/hackfork my-hackathon
-cd my-hackathon
-
-# Run HackFork on your project
-export ANTHROPIC_API_KEY=sk-...
-gitclaw --dir . "I'm building a hackathon project about [your idea]. Help me ideate."
 ```
 
+### 3. Set your API key
+
+Pick one provider and export the key in your terminal:
+
+```bash
+# Google (recommended — free tier available)
+export GOOGLE_API_KEY="your-key-here"
+
+# OR Anthropic
+export ANTHROPIC_API_KEY="sk-ant-..."
+
+# OR OpenAI
+export OPENAI_API_KEY="sk-..."
+```
+
+> Get a free Google API key at [aistudio.google.com](https://aistudio.google.com)
+
+### 4. Run HackFork
+
+```bash
+gitclaw --dir . --model google:gemini-2.0-flash
+```
+
+### 5. Start talking
+
+Once the agent starts, type any of these:
+
+| What you type | What happens |
+|---|---|
+| `I have an idea for...` | Runs `ideate` → writes `PROJECT_BRIEF.md` |
+| `scaffold` | Runs `scaffold` → writes `TODO.md` |
+| `evaluate` | Switches to Judge Mode → writes `JUDGE_REPORT.md` |
+| `pitch` | Runs `pitch` → writes `PITCH.md` + `DEMO_SCRIPT.md` |
+| `retrospect` | Runs `retrospect` → writes `RETROSPECTIVE.md` |
+
 ---
 
-## The Pipeline
-
-HackFork has 5 skills that chain together into a complete hackathon workflow:
+## Pipeline
 
 ```
-ideate → scaffold → evaluate → pitch → retrospect
-  ↓           ↓          ↓         ↓          ↓
-PROJECT_   TODO.md   JUDGE_    PITCH.md  RETROSPECTIVE
-BRIEF.md            REPORT.md + DEMO_       .md
-                               SCRIPT.md
+Your idea
+    │
+    ▼
+[ideate] ──→ PROJECT_BRIEF.md
+    │
+    ▼
+[scaffold] ──→ TODO.md
+    │
+    ▼
+[evaluate] ──→ JUDGE_REPORT.md   ← adversarial Judge Mode
+    │
+    ▼
+[pitch] ──→ PITCH.md + DEMO_SCRIPT.md
+    │
+    ▼
+[retrospect] ──→ RETROSPECTIVE.md
 ```
 
-### 1. `ideate` — From fuzzy → focused
-Asks 5 Socratic questions. Forces scope. Writes `PROJECT_BRIEF.md`.
-
-### 2. `scaffold` — From brief → buildable
-Generates project structure, boilerplate, and a demo-impact-ordered `TODO.md`.
-
-### 3. `evaluate` ⭐ — The adversarial core
-Switches to **Judge Mode**. Reads your codebase. Scores against the judging rubric. Writes `JUDGE_REPORT.md` with your top 3 failure modes and a remediation checklist.
-
-### 4. `pitch` — From code → story
-Generates a 2-minute spoken `DEMO_SCRIPT.md` and a `PITCH.md` with coached judge Q&A.
-
-### 5. `retrospect` — From done → better
-Post-hackathon analysis. Gap analysis. Learning extraction. `RETROSPECTIVE.md`.
+> ⚠️ **SOD enforced:** You cannot run `pitch` without a prior `evaluate`. The agent will refuse and redirect you.
 
 ---
 
-## Judging Rubric (Built Into Every Decision)
+## Deploy to Lyzr Studio (optional)
 
-| Criterion | Weight | What HackFork Optimizes For |
-|---|---|---|
-| Agent Quality | 30% | Compelling SOUL.md, specific RULES.md, useful behavior |
-| Skill Design | 25% | Focused, composable, well-documented skills |
-| Working Demo | 25% | 5-minute live demo with a clear climax |
-| Creativity | 20% | Surprising use case, distinctive personality |
+If you want a browser-based UI instead of the CLI:
 
----
+```bash
+export LYZR_API_KEY="your-lyzr-key"
+gitagent lyzr create -d .
+gitagent lyzr run -d . -p "I want to build a hackathon project"
+```
 
-## Generated Artifacts
-
-| File | Generated By | Contents |
-|---|---|---|
-| `PROJECT_BRIEF.md` | ideate | Problem, solution, demo moment, rubric alignment |
-| `TODO.md` | scaffold | Demo-impact ordered task list with time estimates |
-| `JUDGE_REPORT.md` | evaluate | Score (0-100), failure modes, remediation checklist |
-| `PITCH.md` | pitch | Hook, problem, solution, demo flow, judge Q&A |
-| `DEMO_SCRIPT.md` | pitch | Word-for-word 2-minute spoken demo script |
-| `RETROSPECTIVE.md` | retrospect | Gap analysis, learning, improvements for next time |
+Get your Lyzr key at [studio.lyzr.ai](https://studio.lyzr.ai)
 
 ---
 
-## Project Structure
+## Structure
 
 ```
 hackfork/
-├── agent.yaml              # Manifest: model, skills, runtime config
-├── SOUL.md                 # Dual-persona identity (Builder + Judge)
-├── RULES.md                # Hard constraints & behavioral boundaries
-├── AGENTS.md               # Framework-agnostic fallback instructions
-├── README.md               # This file
+├── agent.yaml                      # Manifest
+├── SOUL.md                         # Agent identity + CLI format spec
+├── RULES.md                        # Behavioral constraints
+├── DUTIES.md                       # Segregation of duties (Builder ↔ Judge)
+├── PROMPT.md                       # Default task router
 ├── skills/
-│   ├── ideate/SKILL.md     # Idea validation + PROJECT_BRIEF.md
-│   ├── scaffold/SKILL.md   # Project structure + TODO.md
-│   ├── evaluate/SKILL.md   # Adversarial scoring + JUDGE_REPORT.md
-│   ├── pitch/SKILL.md      # Demo script + PITCH.md
-│   └── retrospect/SKILL.md # Post-mortem + RETROSPECTIVE.md
+│   ├── ideate/SKILL.md
+│   ├── scaffold/SKILL.md
+│   ├── evaluate/SKILL.md           # ← Judge Mode — must run before pitch
+│   ├── pitch/SKILL.md
+│   └── retrospect/SKILL.md
+├── tools/
+│   ├── rubric-scorer.yaml          # Scores against judging rubric
+│   ├── git-analyzer.yaml           # Reads actual git history
+│   └── timer.yaml                  # Hackathon phase tracker
+├── hooks/
+│   ├── on_session_start.md         # Banner + memory load
+│   └── on_skill_complete.md        # Auto-logs after every skill
+├── knowledge/
+│   └── rubric.md                   # Grounded hackathon strategy
 └── memory/
-    └── MEMORY.md           # Session state & hackathon history
+    └── MEMORY.md                   # Persistent session state
 ```
 
 ---
 
-## Validation
+## Requirements
 
-```bash
-npx gitagent validate
-npx gitagent info
-npx gitagent export -f system-prompt
-```
-
----
-
-## The Meta-Story
-
-HackFork was built at a hackathon, using HackFork itself. This README exists because HackFork's `pitch` skill wrote it. The `JUDGE_REPORT.md` in this repo shows the score HackFork gave itself.
-
-That's not a gimmick. That's the proof.
-
----
-
-## License
-
-MIT — Fork it. Improve it. Win with it.
-
-*"Your git history is your truth. Everything else is narrative."*
+- Node.js 18+
+- `npm install -g gitclaw`
+- One of: `GOOGLE_API_KEY`, `ANTHROPIC_API_KEY`, or `OPENAI_API_KEY`
