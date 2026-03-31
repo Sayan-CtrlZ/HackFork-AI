@@ -1,0 +1,21 @@
+name: git-analyzer
+description: "Analyzes the git history of the current repository to extract what was actually built, committed, and changed. Used by the evaluate skill to compare claimed features against real git evidence. Runs git log, diff-stat, and ls-files via Bash to detect languages, commit velocity, and red flags."
+
+input_schema:
+  type: object
+  required:
+    - since
+  properties:
+    since:
+      type: string
+      description: "Time window to analyze. Examples: '24h', '48h', '7d', 'first-commit'"
+    format:
+      type: string
+      enum:
+        - summary
+        - detailed
+        - timeline
+      description: "Output verbosity. Default: summary"
+    include_diffs:
+      type: boolean
+      description: "Whether to include file diffs in output. Default: false"

@@ -1,0 +1,27 @@
+name: rubric-scorer
+description: "Scores a hackathon project against the official 4-criterion judging rubric (Agent Quality 30%, Skill Design 25%, Working Demo 25%, Creativity 20%). Returns structured scores, verdict, and ranked weaknesses with specific fixes."
+
+input_schema:
+  type: object
+  required:
+    - project_name
+    - agent_quality_evidence
+    - skill_design_evidence
+    - demo_evidence
+    - creativity_evidence
+  properties:
+    project_name:
+      type: string
+      description: "Name of the project being scored"
+    agent_quality_evidence:
+      type: string
+      description: "Evidence for agent quality — SOUL.md distinctiveness, RULES.md constraints, real capabilities vs wrappers"
+    skill_design_evidence:
+      type: string
+      description: "Evidence for skill design — number of skills, composability, input/output contracts, trigger coverage"
+    demo_evidence:
+      type: string
+      description: "Evidence for working demo — live execution, setup friction, fallback plan, wow moment timing"
+    creativity_evidence:
+      type: string
+      description: "Evidence for creativity — novel concept, memorable angle, differentiation from existing tools"

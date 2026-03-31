@@ -1,0 +1,19 @@
+name: timer
+description: "Tracks hackathon time remaining and recommends phase transitions based on deadline proximity. Prevents teams from over-building and missing the pitch window. Phases: ideate (0-15%), build (15-60%), polish (60-80%), pitch (80-95%), critical (95%+)."
+
+input_schema:
+  type: object
+  properties:
+    deadline:
+      type: string
+      description: "Hackathon end time. Formats: ISO 8601 timestamp, '6h from now', 'tomorrow 9am'"
+    total_duration:
+      type: string
+      description: "Total hackathon duration for phase calculation. e.g. '24h', '48h'. Default: 24h"
+    action:
+      type: string
+      enum:
+        - status
+        - set-deadline
+        - recommend
+      description: "Action to perform. Default: status"
