@@ -18,13 +18,8 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install gitagent CLI
-        run: npm install -g gitclaw
-
       - name: Validate agent structure
-        run: gitagent validate
-        working-directory: .
+        run: npx --yes gitagent validate
 
       - name: Print agent info
-        run: gitagent info
-        working-directory: .
+        run: npx --yes gitagent info
