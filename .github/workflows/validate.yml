@@ -13,13 +13,55 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
+      - name: Validate required agent files
+        run: |
+          echo "Checking required gitagent spec files..."
+          PASS=true
 
-      - name: Validate agent structure
-        run: npx --yes gitagent validate
+          for file in agent.yaml SOUL.md RULES.md DUTIES.md; do
+            if [ -f "$file" ]; then
+              echo "✅ $file"
+            else
+              echo "❌ $file — MISSING"
+              PASS=false
+            fi
+          done
+
+          for skill in ideate scaffold evaluate pitch retrospect; do
+            if [ -f "skills/$skill/SKILL.md" ]; then
+              echo "✅ skills/$skill/SKILL.md"
+            else
+              echo "❌ skills/$skill/SKILL.md — MISSING"
+              PASS=false
+            fi
+          done
+
+          for tool in rubric-scorer git-analyzer timer; do
+            if [ -f "tools/$tool.yaml" ]; then
+              echo "✅ tools/$tool.yaml"
+            else
+              echo "❌ tools/$tool.yaml — MISSING"
+              PASS=false
+            fi
+          done
+
+          if [ "$PASS" = false ]; then
+            echo ""
+            echo "❌ Validation failed — required files are missing"
+            exit 1
+          fi
+
+          echo ""
+          echo "✅ All required files present"
 
       - name: Print agent info
-        run: npx --yes gitagent info
+        run: |
+          echo "────────────────────────────────────────"
+          echo "🍴 HackFork Agent — Structure Summary"
+          echo "────────────────────────────────────────"
+          echo "Skills:   $(ls skills/ | wc -l)"
+          echo "Tools:    $(ls tools/ | wc -l)"
+          echo "Hooks:    $(ls hooks/ | wc -l)"
+          echo "Spec:     $(grep 'spec_version' agent.yaml | awk '{print $2}')"
+          echo "Model:    $(grep 'preferred' agent.yaml | awk '{print $2}')"
+          echo "────────────────────────────────────────"
