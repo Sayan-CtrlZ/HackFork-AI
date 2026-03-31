@@ -19,7 +19,7 @@ jobs:
           node-version: "20"
 
       - name: Install gitagent CLI
-        run: npm install -g gitagent
+        run: npm install -g gitclaw
 
       - name: Validate agent structure
         run: gitagent validate
